@@ -76,4 +76,9 @@ public class EtudiantController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/recherche")
+    public Iterable<Etudiant> rechercherParNom(@RequestParam String nom) {
+        return etudiantService.rechercherParNom(nom);
+    }
 }

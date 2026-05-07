@@ -15,4 +15,5 @@ public interface EtudiantRepository extends CrudRepository<Etudiant, Long> {
     Optional<Etudiant> findByNumeroCarte(String numeroCarte);
 
     Iterable<Etudiant> findByNom(String nom);
+    Iterable<Etudiant> findByNomContaining(String nom);
 }

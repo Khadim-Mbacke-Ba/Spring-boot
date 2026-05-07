@@ -56,4 +56,7 @@ public class EtudiantService {
 
         etudiantRepository.delete(etudiant);
     }
+    public Iterable<Etudiant> rechercherParNom(String nom) {
+    return etudiantRepository.findByNomContaining(nom);
+}
 }
