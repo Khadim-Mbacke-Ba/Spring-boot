@@ -47,6 +47,16 @@ public class Ticket {
     @Column(nullable = false)
     private Boolean utilise = false;
 
+    @AssertTrue(message = "La date de validité doit être après la date d'achat")
+    public boolean isDateValid() {
+
+        if (dateAchat == null || dateValidite == null) {
+            return true; // laisse @NotNull gérer ça
+        }
+
+        return dateValidite.isAfter(dateAchat.toLocalDate());
+    }
+
     // Constructeur vide
     public Ticket() {
     }
