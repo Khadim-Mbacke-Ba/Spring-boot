@@ -1,5 +1,7 @@
 package sn.ucad.restou.entity;
+
 import jakarta.persistence.Column;
+import jakarta.validation.constraints.*;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,16 +15,21 @@ public class Etudiant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @NotBlank(message = "Le nom est obligatoire")
+    @Size(min = 2, max = 50, message = "Le nom doit contenir entre 2 et 50 caracteres")
     @Column(name = "nom", nullable = false)
     private String nom;
-
+    @NotBlank(message = "Le prenom est obligatoire")
+    @Size(min = 2, max = 50, message = "Le prenom doit contenir entre 2 et 50 caracteres")
     @Column(name = "prenom", nullable = false)
     private String prenom;
 
+    @NotBlank(message = "L'email est obligatoire")
+    @Email(message = "L'email n'est pas valide")
     @Column(name = "email", nullable = false, unique = true)
     private String email;
-
+    @NotBlank(message = "Le numero de carte est obligatoire")
+    @Pattern(regexp = "^ETU -\\d{4} -\\d{3}$", message = "Le numero de carte doit etre au format ETU -YYYY -NNN ( ex: ETU -2024 -001)")
     @Column(name = "numero_carte", nullable = false, unique = true)
     private String numeroCarte;
 

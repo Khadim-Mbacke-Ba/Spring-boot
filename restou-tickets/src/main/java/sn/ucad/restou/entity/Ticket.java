@@ -95,4 +95,5 @@ public class Ticket {
     public void setUtilise(Boolean utilise) {
         this.utilise = utilise;
     }
+    
 }

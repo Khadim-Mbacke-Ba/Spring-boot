@@ -63,4 +63,9 @@ public class TicketController {
         ticketService.supprimer(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/stats")
+    public ResponseEntity<?> statistiques() {
+        return ResponseEntity.ok(ticketService.statistiques());
+    }
 }
