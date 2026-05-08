@@ -2,6 +2,7 @@ package sn.ucad.restou.service;
 
 import org.springframework.stereotype.Service;
 import sn.ucad.restou.entity.Ticket;
+import sn.ucad.restou.exception.ResourceNotFoundException;
 import sn.ucad.restou.repository.TicketRepository;
 
 import java.time.LocalDate;
@@ -43,20 +44,20 @@ public class TicketService {
         return ticketRepository.findByEtudiantId(etudiantId);
     }
 
-    // VALIDATION TICKET
+    // VALIDATION TICKET (EXERCICE 1)
     public Ticket valider(Long id) {
 
         Ticket ticket = ticketRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Ticket non trouvé"));
+                .orElseThrow(() -> new ResourceNotFoundException("Ticket", "id", id));
 
-        // Vérifier expiration
+        // ❌ Exercice 1 : ticket expiré interdit
         if (ticket.getDateValidite().isBefore(LocalDate.now())) {
-            throw new RuntimeException("Ce ticket est expiré !");
+            throw new IllegalStateException("Ce ticket est expiré");
         }
 
-        // Vérifier utilisation
+        // déjà utilisé
         if (ticket.getUtilise()) {
-            throw new RuntimeException("Ce ticket a déjà été utilisé !");
+            throw new IllegalStateException("Ce ticket a déjà été utilisé");
         }
 
         ticket.setUtilise(true);
@@ -69,6 +70,7 @@ public class TicketService {
         ticketRepository.deleteById(id);
     }
 
+    // STATISTIQUES
     public Map<String, Long> statistiques() {
 
         Iterable<Ticket> tickets = ticketRepository.findAll();
@@ -78,7 +80,6 @@ public class TicketService {
         long disponibles = 0;
 
         for (Ticket ticket : tickets) {
-
             total++;
 
             if (ticket.getUtilise()) {
@@ -89,12 +90,10 @@ public class TicketService {
         }
 
         Map<String, Long> stats = new HashMap<>();
-
         stats.put("total", total);
         stats.put("utilises", utilises);
         stats.put("disponibles", disponibles);
 
         return stats;
     }
-
 }

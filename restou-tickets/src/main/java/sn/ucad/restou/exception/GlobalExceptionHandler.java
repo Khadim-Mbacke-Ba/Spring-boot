@@ -1,5 +1,4 @@
 package sn.ucad.restou.exception;
-package sn.ucad.restou.exception;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;

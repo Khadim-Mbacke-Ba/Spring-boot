@@ -28,8 +28,7 @@ public class Etudiant {
     @Email(message = "L'email n'est pas valide")
     @Column(name = "email", nullable = false, unique = true)
     private String email;
-    @NotBlank(message = "Le numero de carte est obligatoire")
-    @Pattern(regexp = "^ETU -\\d{4} -\\d{3}$", message = "Le numero de carte doit etre au format ETU -YYYY -NNN ( ex: ETU -2024 -001)")
+    @ValidNumeroCarte
     @Column(name = "numero_carte", nullable = false, unique = true)
     private String numeroCarte;
 
