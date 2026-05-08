@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
 import sn.ucad.restou.entity.Etudiant;
 import sn.ucad.restou.service.EtudiantService;
 
@@ -34,7 +35,7 @@ public class EtudiantController {
 
     // Créer un étudiant
     @PostMapping
-    public ResponseEntity<Etudiant> creer(@RequestBody Etudiant etudiant) {
+    public ResponseEntity<Etudiant> creer(@Valid @RequestBody Etudiant etudiant) {
 
         Etudiant nouveauEtudiant = etudiantService.creer(etudiant);
 
@@ -47,7 +48,7 @@ public class EtudiantController {
     @PutMapping("/{id}")
     public ResponseEntity<Etudiant> mettreAJour(
             @PathVariable Long id,
-            @RequestBody Etudiant etudiant) {
+            @Valid @RequestBody Etudiant etudiant) {
 
         try {
 
