@@ -2,9 +2,8 @@
 package sn.ucad.restou.service;
 
 import java.util.Optional;
-
 import org.springframework.stereotype.Service;
-
+import sn.ucad.restou.exception.ResourceNotFoundException;
 import sn.ucad.restou.entity.Etudiant;
 import sn.ucad.restou.repository.EtudiantRepository;
 
@@ -12,13 +11,13 @@ import sn.ucad.restou.repository.EtudiantRepository;
 public class EtudiantService {
 
     private final EtudiantRepository etudiantRepository;
-    public EtudiantService(EtudiantRepository etudiantRepository) 
-    {
+
+    public EtudiantService(EtudiantRepository etudiantRepository) {
         this.etudiantRepository = etudiantRepository;
     }
+
     // Créer un étudiant
-    public Etudiant creer(Etudiant etudiant) 
-    {
+    public Etudiant creer(Etudiant etudiant) {
         return etudiantRepository.save(etudiant);
     }
 
@@ -36,8 +35,7 @@ public class EtudiantService {
     public Etudiant mettreAJour(Long id, Etudiant etudiantDetails) {
 
         Etudiant etudiant = etudiantRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(
-                        "Etudiant non trouvé avec l'id : " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Etudiant", "id", id));
 
         etudiant.setNom(etudiantDetails.getNom());
         etudiant.setPrenom(etudiantDetails.getPrenom());
@@ -51,12 +49,12 @@ public class EtudiantService {
     public void supprimer(Long id) {
 
         Etudiant etudiant = etudiantRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(
-                        "Etudiant non trouvé avec l'id : " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Etudiant", "id", id));
 
         etudiantRepository.delete(etudiant);
     }
+
     public Iterable<Etudiant> rechercherParNom(String nom) {
-    return etudiantRepository.findByNomContaining(nom);
-}
+        return etudiantRepository.findByNomContaining(nom);
+    }
 }
