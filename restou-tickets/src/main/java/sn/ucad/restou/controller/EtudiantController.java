@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import sn.ucad.restou.entity.Etudiant;
 import sn.ucad.restou.service.EtudiantService;
+import sn.ucad.restou.exception.ResourceNotFoundException;
 
 @RestController
 @RequestMapping("/api/etudiants")
@@ -28,9 +29,11 @@ public class EtudiantController {
     @GetMapping("/{id}")
     public ResponseEntity<Etudiant> recupererParId(@PathVariable Long id) {
 
-        return etudiantService.recupererParId(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        Etudiant etudiant = etudiantService.recupererParId(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Etudiant", "id", id));
+
+        return ResponseEntity.ok(etudiant);
     }
 
     // Créer un étudiant
@@ -50,34 +53,21 @@ public class EtudiantController {
             @PathVariable Long id,
             @Valid @RequestBody Etudiant etudiant) {
 
-        try {
+        Etudiant etudiantMisAJour = etudiantService.mettreAJour(id, etudiant);
 
-            Etudiant etudiantMisAJour = etudiantService.mettreAJour(id, etudiant);
-
-            return ResponseEntity.ok(etudiantMisAJour);
-
-        } catch (RuntimeException e) {
-
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(etudiantMisAJour);
     }
 
     // Supprimer un étudiant
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> supprimer(@PathVariable Long id) {
 
-        try {
+        etudiantService.supprimer(id);
 
-            etudiantService.supprimer(id);
-
-            return ResponseEntity.noContent().build();
-
-        } catch (RuntimeException e) {
-
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.noContent().build();
     }
 
+    // Recherche par nom
     @GetMapping("/recherche")
     public Iterable<Etudiant> rechercherParNom(@RequestParam String nom) {
         return etudiantService.rechercherParNom(nom);
