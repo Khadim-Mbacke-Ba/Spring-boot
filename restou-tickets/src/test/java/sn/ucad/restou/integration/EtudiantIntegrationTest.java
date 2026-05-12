@@ -28,7 +28,10 @@ class EtudiantIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        restClient = RestClient.create("http://localhost:" + port);
+        restClient = RestClient.builder()
+                .baseUrl("http://localhost:" + port)
+                .defaultHeaders(headers -> headers.setBasicAuth("test", "test"))
+                .build();
     }
 
     /**
