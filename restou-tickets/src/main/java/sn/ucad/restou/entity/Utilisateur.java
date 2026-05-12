@@ -34,7 +34,7 @@ public class Utilisateur implements UserDetails {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private Role role = Role.ETUDIANT; // ✅ corrigé
+    private Role role = Role.ETUDIANT; // corrigé
 
     // Constructeurs
     public Utilisateur() {
