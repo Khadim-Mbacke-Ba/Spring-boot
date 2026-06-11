@@ -2,12 +2,21 @@ package sn.ucad.restou.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import sn.ucad.restou.entity.Etudiant;
-import sn.ucad.restou.service.EtudiantService;
 import sn.ucad.restou.exception.ResourceNotFoundException;
+import sn.ucad.restou.service.EtudiantService;
 
 @RestController
 @RequestMapping("/api/etudiants")
@@ -21,12 +30,14 @@ public class EtudiantController {
 
     // Récupérer tous les étudiants
     @GetMapping
+    @PreAuthorize("hasAnyRole('GERANT','ADMIN')")
     public Iterable<Etudiant> recupererTous() {
         return etudiantService.recupererTous();
     }
 
     // Récupérer un étudiant par ID
     @GetMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Etudiant> recupererParId(@PathVariable Long id) {
 
         Etudiant etudiant = etudiantService.recupererParId(id)
@@ -38,7 +49,9 @@ public class EtudiantController {
 
     // Créer un étudiant
     @PostMapping
-    public ResponseEntity<Etudiant> creer(@Valid @RequestBody Etudiant etudiant) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Etudiant> creer(
+            @Valid @RequestBody Etudiant etudiant) {
 
         Etudiant nouveauEtudiant = etudiantService.creer(etudiant);
 
@@ -49,17 +62,20 @@ public class EtudiantController {
 
     // Mettre à jour un étudiant
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Etudiant> mettreAJour(
             @PathVariable Long id,
             @Valid @RequestBody Etudiant etudiant) {
 
-        Etudiant etudiantMisAJour = etudiantService.mettreAJour(id, etudiant);
+        Etudiant etudiantMisAJour =
+                etudiantService.mettreAJour(id, etudiant);
 
         return ResponseEntity.ok(etudiantMisAJour);
     }
 
     // Supprimer un étudiant
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> supprimer(@PathVariable Long id) {
 
         etudiantService.supprimer(id);
@@ -69,7 +85,10 @@ public class EtudiantController {
 
     // Recherche par nom
     @GetMapping("/recherche")
-    public Iterable<Etudiant> rechercherParNom(@RequestParam String nom) {
+    @PreAuthorize("isAuthenticated()")
+    public Iterable<Etudiant> rechercherParNom(
+            @RequestParam String nom) {
+
         return etudiantService.rechercherParNom(nom);
     }
 }
