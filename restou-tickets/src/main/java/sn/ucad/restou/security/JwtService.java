@@ -1,9 +1,5 @@
 package sn.ucad.restou.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
-
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,6 +11,10 @@ import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtService {
@@ -88,4 +88,22 @@ public class JwtService {
         return Keys.hmacShaKeyFor(
                 secretKey.getBytes(StandardCharsets.UTF_8));
     }
+    // Nouvelle méthode : générer un token avec le rôle
+public String generateToken(UserDetails userDetails, String role) {
+
+    Map<String, Object> extraClaims = new HashMap<>();
+
+    extraClaims.put("role", role);
+
+    return generateToken(extraClaims, userDetails);
+}
+
+// Nouvelle méthode : extraire le rôle du token
+public String extractRole(String token) {
+
+    return extractClaim(
+            token,
+            claims -> claims.get("role", String.class)
+    );
+}
 }

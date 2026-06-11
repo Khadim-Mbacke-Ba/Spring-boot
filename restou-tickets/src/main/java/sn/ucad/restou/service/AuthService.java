@@ -8,12 +8,9 @@ import org.springframework.stereotype.Service;
 import sn.ucad.restou.dto.AuthResponse;
 import sn.ucad.restou.dto.LoginRequest;
 import sn.ucad.restou.dto.RegisterRequest;
-
 import sn.ucad.restou.entity.Role;
 import sn.ucad.restou.entity.Utilisateur;
-
 import sn.ucad.restou.repository.UtilisateurRepository;
-
 import sn.ucad.restou.security.JwtService;
 
 @Service
@@ -55,7 +52,7 @@ public class AuthService {
         utilisateurRepository.save(utilisateur);
 
         // Génération du token JWT
-        String token = jwtService.generateToken(utilisateur);
+String token = jwtService . generateToken ( utilisateur , utilisateur . getRole (). name ());
 
         // Retour de la réponse
         return new AuthResponse(
@@ -81,7 +78,7 @@ public class AuthService {
                 .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
 
         // Génération du token JWT
-        String token = jwtService.generateToken(utilisateur);
+        String token = jwtService.generateToken(utilisateur, utilisateur.getRole().name());
 
         // Retour de la réponse
         return new AuthResponse(
