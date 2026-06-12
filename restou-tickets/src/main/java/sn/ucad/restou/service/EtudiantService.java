@@ -20,6 +20,9 @@ public class EtudiantService {
     public Etudiant creer(Etudiant etudiant) {
         return etudiantRepository.save(etudiant);
     }
+    public long countEtudiants() {
+    return etudiantRepository.count();
+}
 
     // Récupérer tous les étudiants
     public Iterable<Etudiant> recupererTous() {

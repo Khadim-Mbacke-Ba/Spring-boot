@@ -53,11 +53,21 @@ public class DataInitializer {
                     Role.ADMIN
             );
             utilisateurRepository.save(aminata);
+            Utilisateur caissier = new Utilisateur();
+
+         caissier.setNom("Mbaye");
+        caissier.setPrenom("Ousmane");
+        caissier.setEmail("ousmane@ucad.sn");
+         caissier.setPassword(passwordEncoder.encode("password"));
+        caissier.setRole(Role.CAISSIER);
+
+          utilisateurRepository.save(caissier);
 
             System.out.println("=== Données de test chargées ===");
             System.out.println("ETUDIANT : fatou@ucad.edu.sn / password123");
             System.out.println("GERANT   : moussa@ucad.edu.sn / password123");
             System.out.println("ADMIN    : aminata@ucad.edu.sn / password123");
+            System.out.println("CAISSIER : ousmane@ucad.sn / password");
         };
     }
 }

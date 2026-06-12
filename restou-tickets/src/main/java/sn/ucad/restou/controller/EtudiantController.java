@@ -91,4 +91,10 @@ public class EtudiantController {
 
         return etudiantService.rechercherParNom(nom);
     }
+    @GetMapping("/count")
+@PreAuthorize("hasAnyRole('ADMIN','CAISSIER')")
+public long countEtudiants() {
+
+    return etudiantService.countEtudiants();
+}
 }
